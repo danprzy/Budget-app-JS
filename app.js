@@ -18,6 +18,14 @@ var budgetController = (function() {
     // var totalExpenses = 0;
     // var totalIncomes = 0;
 
+    var calculateTotal = function(type) {
+        var sum = 0;
+        data.allItems[type].forEach(function(cur) {
+            sum += cur.value;
+        });
+        data.totals[type] = sum;
+    };
+
     var data = {
         allItems: {
             exp: [],
@@ -26,7 +34,9 @@ var budgetController = (function() {
         totals: {
             exp: 0,
             inc: 0
-        }
+        },
+        budget: 0,
+        percentage: -1
     };
 
     return {
@@ -53,6 +63,31 @@ var budgetController = (function() {
 
             // return new element
             return newItem;
+        },
+
+        calculateBudget: function() {
+            // calculate total income and expenses
+            calculateTotal('exp');
+            calculateTotal('inc');
+
+            // calculate budget: income - expences
+            data.budget = data.totals.inc - data.totals.exp;
+
+            // calculete the percentage of income that we spent
+            if (data.totals.inc > 0) {
+                data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+            } else {
+                data.percentage = -1;
+            }
+        },
+
+        getBudget: function() {
+            return {
+                budget: data.budget,
+                totalInc: data.totals.inc,
+                totalExp: data.totals.exp,
+                percentage: data.percentage
+            }
         },
 
         testing: function() {
@@ -142,10 +177,11 @@ var controler = (function(budgetCtrl, UICtrl) {
 
     var updateBudget = function() {
         // 1. calculate budget
-
+        budgetCtrl.calculateBudget();
         // 2. return budget
-
+        var budget = budgetCtrl.getBudget();
         // 3. display the budget on the UI   
+        console.log(budget);
     }
 
     var ctrlAddItem = function() {
@@ -153,7 +189,7 @@ var controler = (function(budgetCtrl, UICtrl) {
         // 1. get the field input data
         input = UIControler.getInput();
 
-        if (input.description !== '' && !isNaN(input.value) && input.value> 0) {
+        if (input.description !== '' && !isNaN(input.value) && input.value > 0) {
 
             // 2. add item to the budget controller
             newItem = budgetCtrl.addItem(input.type, input.description, input.value);
