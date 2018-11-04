@@ -15,7 +15,6 @@ var budgetController = (function() {
         } else {
             this.percentage = -1;
         }
-
     };
 
     Expense.prototype.getPercantage = function() {
@@ -28,10 +27,6 @@ var budgetController = (function() {
         this.value = value;
     };
 
-    // var allExpenses = [];
-    // var allIncomes = [];
-    // var totalExpenses = 0;
-    // var totalIncomes = 0;
 
     var calculateTotal = function(type) {
         var sum = 0;
@@ -54,8 +49,6 @@ var budgetController = (function() {
         percentage: -1
     };
 
-
-
     return {
         addItem: function(type, des, val) {
             var newItem, ID;
@@ -67,7 +60,6 @@ var budgetController = (function() {
             } else {
                 ID = 0;
             }
-
 
             //create new item
             if (type === 'exp') {
@@ -92,9 +84,8 @@ var budgetController = (function() {
             if (index !== -1) {
                 data.allItems[type].splice(index, 1)
             }
-
         },
-        /**/
+       
         calculateBudget: function() {
             // calculate total income and expenses
             calculateTotal('exp');
@@ -109,7 +100,6 @@ var budgetController = (function() {
             } else {
                 data.percentage = -1;
             }
-
             //   console.log(data.allItems);
         },
 
@@ -191,7 +181,6 @@ var UIControler = (function() {
             callback(list[i], i);
         }
     };
-
 
     return {
         getInput: function() {
@@ -285,7 +274,6 @@ var UIControler = (function() {
             nodeListForEach(fields, function(cur) {
                 cur.classList.toggle('red-focus');
             });
-
             document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
         },
 
